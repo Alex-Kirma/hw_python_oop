@@ -62,7 +62,6 @@ class Training:
 class Running(Training):
     """Тренировка: бег."""
 
-    M_IN_KM: ClassVar[int] = 1000
     COEFF_CALORIE_1: ClassVar[int] = 18
     COEFF_CALORIE_2: ClassVar[int] = 20
     HOUR: ClassVar[int] = 60
@@ -81,9 +80,6 @@ class SportsWalking(Training):
     DEGREE: ClassVar[int] = 2
     COEFF_WALKING_1: ClassVar[float] = 0.035
     COEFF_WALKING_2: ClassVar[float] = 0.029
-    action: int
-    duration: float
-    weight: float
     height: float
 
     def get_spent_calories(self):
@@ -98,12 +94,8 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: ClassVar[float] = 1.38
-    M_IN_KM: ClassVar[int] = 1000
     KOEFF_SPENT_CALORIES_1: ClassVar[float] = 1.1
     KOEFF_SPENT_CALORIES_2: ClassVar[int] = 2
-    action: int
-    duration: float
-    weight: float
     length_pool: float
     count_pool: int
 
@@ -126,14 +118,15 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    dict = {'SWM': Swimming,
-            'RUN': Running,
-            'WLK': SportsWalking}
-
-    for key_dict, value_dict in dict.items():
-        if workout_type == key_dict:
-            training_type = value_dict(*data)
+    try:
+        dict_type_trening = {'SWM': Swimming,
+                             'RUN': Running,
+                             'WLK': SportsWalking}
+        if workout_type in dict_type_trening:
+            training_type = dict_type_trening[workout_type](*data)
             return training_type
+    except NameError:
+        raise ('Неккоретный тип тренировки: {workout_type}')
 
 
 def main(training: Training) -> None:
