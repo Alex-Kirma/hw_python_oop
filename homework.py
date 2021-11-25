@@ -119,14 +119,15 @@ class Swimming(Training):
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
     try:
-        dict_type_trening = {'SWM': Swimming,
-                             'RUN': Running,
-                             'WLK': SportsWalking}
+        dict_type_trening = {
+            'SWM': Swimming,
+            'RUN': Running,
+            'WLK': SportsWalking}
         if workout_type in dict_type_trening:
             training_type = dict_type_trening[workout_type](*data)
             return training_type
-    except NameError:
-        raise ('Неккоретный тип тренировки: {workout_type}')
+    except KeyError:
+        raise (f'Неккоретный тип тренировки: {workout_type}')
 
 
 def main(training: Training) -> None:
